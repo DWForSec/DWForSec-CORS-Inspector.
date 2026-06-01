@@ -22,6 +22,15 @@ export default function App() {
         body: JSON.stringify({ targetUrl, origin, method }),
       });
 
+      // Check if response is JSON before parsing
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        throw new Error(
+          `Backend returned non-JSON response (${response.status}). ` +
+          'Make sure the backend server is running (npm run server).'
+        );
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
